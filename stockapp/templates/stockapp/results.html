@@ -1,0 +1,23 @@
+{% comment %} {% extends "base.html" %} {% block content %}
+<h1>Stock Data for {{ stock_data.ticker }}</h1>
+<table>
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Open</th>
+      <th>Close</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for index, row in stock_data.iterrows %}
+    <tr>
+      <td>{{ index }}</td>
+      <td>{{ row.Open }}</td>
+      <td>{{ row.Close }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<canvas id="chart"></canvas>
+
+{% endblock %} {% endcomment %}

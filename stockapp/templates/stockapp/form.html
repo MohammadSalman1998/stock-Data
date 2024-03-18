@@ -1,0 +1,63 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+  <h1 class="mt-5">Enter Stock Data</h1>
+  <form method="post" class="mt-5">
+    {% csrf_token %}
+    <label for="ticker">Ticker Symbol:</label>
+    <input type="text" id="id_ticker" name="ticker" value="{{ticker}}">
+    
+    <label for="start-date">Start Date:</label>
+    <input type="date" id="id_start_date" name="start_date" value="{{startDate}}">
+    
+    <label for="end-date">End Date:</label>
+    <input type="date" id="id_end_date" name="end_date" value="{{endDate}}">
+
+    <button type="submit">Submit</button>
+  </form>
+  <h1 class="mt-5">Stock Data for <span class="text-danger"> {{ ticker }}<span></h1>
+  <h1 class="mt-5"><span class="text-danger"> {{ errorInput }}<span></h1>
+  <table class="table table-striped hover nowrap overflow-auto" id="stock_data_Table" style="width:100%">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Open</th>
+        <th>Close</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for index, row in stock_data.iterrows %}
+      <tr>
+        <td>{{ index }}</td>
+        <td>{{ row.Open }}</td>
+        <td>{{ row.Close }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div id="chart" class="mt-5 chart-container "></div>
+
+  <script>
+    new DataTable('#stock_data_Table', {
+      responsive: true,
+      rowReorder: {
+          selector: 'td:nth-child(3)'
+      }
+    });
+  </script>
+
+  <script>
+    var resChart = {{ resChart|safe }};
+    result = resChart.split("|")
+    figureData = result[0];
+
+    parsedData = JSON.parse(figureData);
+    Plotly.newPlot('chart', parsedData.data, parsedData.layout);
+</script>
+{% endblock %}
+
+
+
+
